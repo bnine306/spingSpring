@@ -1,0 +1,15 @@
+server:
+  address: 0.0.0.0
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sping_db  # MySQL 데이터베이스 URL
+    username: ucss002                           # MySQL 사용자 이름
+    password: 'qwerasdf!@#$'                    # MySQL 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL JDBC 드라이버 클래스
+
+    # mybatis 설정.
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
