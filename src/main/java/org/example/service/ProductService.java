@@ -17,7 +17,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private static final String IMAGE_FOLDER = "C:/Users/USER/Desktop/spingbackupfile/homereactCategory/public/images"; // 이미지 저장 폴더
+    private static final String IMAGE_FOLDER = "C:/Users/USER/Desktop/발표 전/homereactCategory/public/images"; // 이미지 저장 폴더
 
     // 상품 추가 및 이미지 저장
     public String addProduct(ProductDTO productDTO) throws IOException {

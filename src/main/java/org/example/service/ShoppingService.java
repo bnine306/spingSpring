@@ -67,6 +67,7 @@ public class ShoppingService {
         return shoppingRepository.findById(userId);
     }
 
+    //사용자 정보 업데이트
     public UserDTO updateUser(Long userId, UserDTO updatedUserDTO) {
         UserDTO existingUser = shoppingRepository.findById(userId);
 

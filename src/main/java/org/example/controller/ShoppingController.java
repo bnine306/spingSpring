@@ -87,6 +87,7 @@ public class ShoppingController {
         }
     }
 
+    // 사용자 정보 변경
     @PostMapping("/api/user/{userId}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
         UserDTO updatedUser = shoppingService.updateUser(userId, userDTO);
