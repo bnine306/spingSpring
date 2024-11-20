@@ -1,12 +1,19 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dto.ProductDTO;
 import org.example.dto.UserDTO;
 import org.example.service.ShoppingService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +56,8 @@ public class ShoppingController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody UserDTO userDTO) {
-        Map<String, String> response = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserDTO userDTO) {
+        Map<String, Object> response = new HashMap<>();
 
         // 이메일과 비밀번호를 함께 검사
         boolean isValidLogin = shoppingService.loginCheck(userDTO.getEmail(), userDTO.getPassword());
@@ -61,8 +68,48 @@ public class ShoppingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); // 400 Bad Request
         }
 
-        // 로그인 성공
+        // 로그인 성공 시 사용자 정보와 함께 메시지 반환
+        UserDTO user = shoppingService.getUserByEmail(userDTO.getEmail());
         response.put("message", "로그인 성공");
+        response.put("id", user.getId()); // id 값 추가
         return ResponseEntity.ok(response); // 200 OK
     }
+
+
+    // 사용자 정보 조회 (GET 요청)
+    @GetMapping("/api/user/{userId}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
+        UserDTO user = shoppingService.getUserById(userId);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PostMapping("/api/user/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
+        UserDTO updatedUser = shoppingService.updateUser(userId, userDTO);
+        if (updatedUser != null) {
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+
+    }
+
+    @DeleteMapping("/api/user/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        boolean isDeleted = shoppingService.deleteUser(userId);  // userId를 서비스에 전달
+        if (isDeleted) {
+            return ResponseEntity.ok("사용자 계정이 삭제되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 삭제에 실패했습니다.");
+        }
+    }
+
+
+
+
 }

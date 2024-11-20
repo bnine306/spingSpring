@@ -5,13 +5,13 @@ import org.example.dto.UserDTO;
 import org.example.repository.ShoppingRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ShoppingService {
+
     private final ShoppingRepository shoppingRepository;
 
     // 모든 유저 조회
@@ -28,7 +28,6 @@ public class ShoppingService {
     // 회원가입 처리
     public boolean registerUser(UserDTO userDTO) {
         // 현재 시간을 설정하여 createAt, updateAt에 명시적으로 값을 설정
-
         Date now = new Date();
         userDTO.setCreateAt(now);
         userDTO.setUpdateAt(now);
@@ -41,6 +40,7 @@ public class ShoppingService {
         // 회원가입 처리 (저장)
         return shoppingRepository.saveUser(userDTO);
     }
+
 
     // 로그인 시 비밀번호 체크
     public boolean loginCheck(String email, String password) {
@@ -57,4 +57,35 @@ public class ShoppingService {
         return false;
     }
 
+    public UserDTO getUserByEmail(String email) {
+        return shoppingRepository.findByEmail(email);
+    }
+
+
+    // 사용자 정보 조회
+    public UserDTO getUserById(Long userId) {
+        return shoppingRepository.findById(userId);
+    }
+
+    public UserDTO updateUser(Long userId, UserDTO updatedUserDTO) {
+        UserDTO existingUser = shoppingRepository.findById(userId);
+
+        if (existingUser != null) {
+            // 수정할 필드만 업데이트
+            existingUser.setEmail(updatedUserDTO.getEmail());
+            existingUser.setUsername(updatedUserDTO.getUsername());
+            existingUser.setPassword(updatedUserDTO.getPassword());
+            existingUser.setUpdateAt(new Date());  // 수정일 업데이트
+
+            // 저장된 정보 업데이트
+            shoppingRepository.updateUser(existingUser);
+            return existingUser;
+        }
+        return null;
+    }
+
+    public boolean deleteUser(Long userId) {
+        // 사용자 삭제 처리
+        return shoppingRepository.deleteUser(userId);
+    }
 }

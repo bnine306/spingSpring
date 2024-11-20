@@ -28,9 +28,25 @@ public class ShoppingRepository {
         return result > 0; // 저장 성공 시 true 반환
     }
 
-
     // 로그인 시 이메일로 사용자 정보 조회
     public UserDTO loginPass(String email) {//DTO 형식으로 받아야 이메일, 비밀번호 비교가능
         return sql.selectOne("User.LoginPass", email); // 매퍼에서 정의된 쿼리 실행
     }
+
+    public UserDTO findById(Long id) {
+        return sql.selectOne("User.FindById", id);
+    }
+
+    public void updateUser(UserDTO userDTO) {
+        sql.update("User.UpdateUser", userDTO);
+    }
+
+    // 사용자 삭제
+    public boolean deleteUser(Long userId) {
+        int result = sql.delete("User.DeleteUser", userId); // userId를 직접 전달
+        return result > 0;  // 삭제 성공 시 true 반환
+    }
+
+
+
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MyBatis 3 Mapper//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Product">
+    <insert id="saveProduct" parameterType="Product">
+        INSERT INTO product (productnum, arrivaldate, price, category, imageurl)
+        VALUES (#{productnum}, #{arrivaldate}, #{price}, #{category}, #{imageUrl});  <!-- imageUrl로 변경 -->
+    </insert>
+
+    <select id="getProducts" parameterType="String" resultType="Product">
+        SELECT *
+        FROM product
+        WHERE category = #{category};
+    </select>
+
+    <select id="getAllProducts" resultType="Product">
+        SELECT * FROM product;
+    </select>
+
+    <!-- 카테고리별로 가격 낮은 순으로 정렬 -->
+    <select id="getProductsByCategoryOrderByPriceAsc" parameterType="String" resultType="Product">
+        SELECT *
+        FROM product
+        WHERE category = #{category}
+        ORDER BY price ASC;
+    </select>
+
+    <!-- 카테고리별로 가격 높은 순으로 정렬 -->
+    <select id="getProductsByCategoryOrderByPriceDesc" parameterType="String" resultType="Product">
+        SELECT *
+        FROM product
+        WHERE category = #{category}
+        ORDER BY price DESC;
+    </select>
+
+    <!-- 가격 낮은 순으로 전체 상품 가져오기 -->
+    <select id="getAllProductsOrderByPriceAsc" resultType="Product">
+        SELECT * FROM product
+        ORDER BY price ASC;
+    </select>
+
+    <!-- 가격 높은 순으로 전체 상품 가져오기 -->
+    <select id="getAllProductsOrderByPriceDesc" resultType="Product">
+        SELECT * FROM product
+        ORDER BY price DESC;
+    </select>
+
+    <select id="getProductById" parameterType="Long" resultType="Product">
+        SELECT * FROM product WHERE productid = #{productId};
+    </select>
+</mapper>
