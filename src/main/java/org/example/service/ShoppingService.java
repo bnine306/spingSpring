@@ -3,6 +3,8 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.UserDTO;
 import org.example.repository.ShoppingRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,6 +15,12 @@ import java.util.List;
 public class ShoppingService {
 
     private final ShoppingRepository shoppingRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    //비밀번호 암호화
+    public String encodePassword(String rawPassword){
+        return passwordEncoder.encode(rawPassword);
+    }
 
     // 모든 유저 조회
     public List<UserDTO> getUserList() {
@@ -37,6 +45,11 @@ public class ShoppingService {
             return false; // 이메일 중복 시 회원가입 실패
         }
 
+        //암호화
+        String encodedPassword = encodePassword(userDTO.getPassword());
+        userDTO.setPassword(encodedPassword); // 암호화된 비밀번호를 DTO에 설정
+
+
         // 회원가입 처리 (저장)
         return shoppingRepository.saveUser(userDTO);
     }
@@ -50,7 +63,7 @@ public class ShoppingService {
         // 사용자 정보가 존재하면 비밀번호 비교
         if (user != null) {
             // 비밀번호가 일치하는지 확인
-            return user.getPassword().equals(password); // 암호화 없이 비밀번호 비교
+            return passwordEncoder.matches(password, user.getPassword());// 입력된 비밀번호와 암호화된 비밀번호 비교
         }
 
         // 이메일이 없으면 false 반환
