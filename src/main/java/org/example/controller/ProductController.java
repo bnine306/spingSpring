@@ -24,33 +24,30 @@ public class ProductController {
     @PostMapping("/api/productinput")
     public ResponseEntity<Map<String, String>> addProduct(
             @RequestParam String productnum,
-            @RequestParam String arrivaldate,  // String으로 받아서 파싱
-            @RequestParam String price,  // String으로 받음
+            @RequestParam String arrivaldate,
+            @RequestParam String price,
             @RequestParam String category,
-            @RequestParam("image") MultipartFile image) {  // image로 변경
+            @RequestParam("image") MultipartFile image,
+            @RequestParam String content) { // 콘텐츠 필드 추가
 
         Map<String, String> response = new HashMap<>();
         try {
-            // arrivaldate를 String에서 LocalDate로 변환
             LocalDate parsedArrivalDate = LocalDate.parse(arrivaldate);
-
-            // price를 String에서 Long으로 변환
             Long parsedPrice = Long.parseLong(price);
 
-            // productDTO를 새로 생성하고 각 필드를 세팅
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductnum(productnum);
-            productDTO.setArrivaldate(parsedArrivalDate);  // 변환된 LocalDate 값 설정
-            productDTO.setPrice(parsedPrice);  // 변환된 Long 값 설정
+            productDTO.setArrivaldate(parsedArrivalDate);
+            productDTO.setPrice(parsedPrice);
             productDTO.setCategory(category);
-            productDTO.setImage(image);  // MultipartFile로 받은 이미지를 설정
+            productDTO.setImage(image);
+            productDTO.setContent(content); // 콘텐츠 추가
 
-            // 서비스 메소드 호출 (상품 추가)
-            String imageUrl = productService.addProduct(productDTO);  // imageUrl 반환
+            String imageUrl = productService.addProduct(productDTO);
 
             if (imageUrl != null) {
                 response.put("message", "상품 추가 성공");
-                response.put("imageUrl", imageUrl);  // 이미지 URL 반환
+                response.put("imageUrl", imageUrl);
                 return ResponseEntity.ok(response);
             } else {
                 response.put("message", "상품 추가 실패");

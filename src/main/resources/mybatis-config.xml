@@ -5,5 +5,6 @@
     <typeAliases>
         <typeAlias type="org.example.dto.UserDTO" alias="User"/>
         <typeAlias type="org.example.dto.ProductDTO" alias="Product"/>
+        <typeAlias type="org.example.dto.CartDTO" alias="Cart"/>
     </typeAliases>
 </configuration>

@@ -90,6 +90,7 @@ public class ShoppingController {
     // 사용자 정보 변경
     @PostMapping("/api/user/{userId}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
+        System.out.println("Update User called for userId: " + userId);
         UserDTO updatedUser = shoppingService.updateUser(userId, userDTO);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);

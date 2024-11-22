@@ -84,11 +84,17 @@ public class ShoppingService {
     public UserDTO updateUser(Long userId, UserDTO updatedUserDTO) {
         UserDTO existingUser = shoppingRepository.findById(userId);
 
+        System.out.println("Password from request: " + updatedUserDTO.getPassword());
         if (existingUser != null) {
             // 수정할 필드만 업데이트
             existingUser.setEmail(updatedUserDTO.getEmail());
             existingUser.setUsername(updatedUserDTO.getUsername());
-            existingUser.setPassword(updatedUserDTO.getPassword());
+            // 비밀번호가 수정된 경우 암호화하여 업데이트
+            if (updatedUserDTO.getPassword() != null && !updatedUserDTO.getPassword().isEmpty()) {
+                String encodedPassword = encodePassword(updatedUserDTO.getPassword());
+                System.out.println("Encoded Password: " + encodedPassword); // 디버깅용 로그
+                existingUser.setPassword(encodedPassword);
+            }
             existingUser.setUpdateAt(new Date());  // 수정일 업데이트
 
             // 저장된 정보 업데이트

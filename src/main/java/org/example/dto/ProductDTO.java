@@ -18,6 +18,7 @@ public class ProductDTO {
     private String category;
     private MultipartFile image;  // MultipartFile 타입을 image로 이름 변경
     private String imageUrl;  // 이미지 경로를 저장할 String 타입
+    private String content; // 추가된 콘텐츠 필드
 
     @JsonFormat(pattern = "yyyy-MM-dd")  // LocalDate 형식에 맞게 수정
     private LocalDate arrivaldate;  // LocalDate 타입으로 수정

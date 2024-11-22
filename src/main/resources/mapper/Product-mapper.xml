@@ -4,8 +4,8 @@
 
 <mapper namespace="Product">
     <insert id="saveProduct" parameterType="Product">
-        INSERT INTO product (productnum, arrivaldate, price, category, imageurl)
-        VALUES (#{productnum}, #{arrivaldate}, #{price}, #{category}, #{imageUrl});  <!-- imageUrl로 변경 -->
+        INSERT INTO product (productnum, arrivaldate, price, category, imageurl, content)
+        VALUES (#{productnum}, #{arrivaldate}, #{price}, #{category}, #{imageUrl}, #{content});
     </insert>
 
     <select id="getProducts" parameterType="String" resultType="Product">
@@ -49,4 +49,5 @@
     <select id="getProductById" parameterType="Long" resultType="Product">
         SELECT * FROM product WHERE productid = #{productId};
     </select>
+
 </mapper>

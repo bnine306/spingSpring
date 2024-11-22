@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MyBatis 3 Mapper//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Cart">
+
+    <!-- 장바구니에 상품이 존재하는지 확인 (상품ID, 사용자ID로 체크) -->
+    <select id="existsByUserIdAndProductId" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM cart
+        WHERE userid = #{userId} AND productid = #{productId}
+    </select>
+
+    <!-- 장바구니에 상품 추가 -->
+    <insert id="save" parameterType="Cart">
+        INSERT INTO cart (userid, productid, product_description, quantity)
+        VALUES (#{userid}, #{productid}, #{product_description}, #{quantity});
+    </insert>
+
+    <!-- 장바구니에 수량 업데이트 -->
+    <update id="updateQuantity" parameterType="Cart">
+        UPDATE cart
+        SET quantity = #{quantity}
+        WHERE userid = #{userid} AND productid = #{productid};
+    </update>
+
+    <!-- 특정 사용자의 장바구니 항목 가져오기 -->
+    <select id="findCartItemsByUserId" parameterType="long" resultType="Cart">
+        SELECT userid, productid, product_description, quantity
+        FROM cart
+        WHERE userid = #{userId}
+    </select>
+
+    <!-- 장바구니에서 상품 삭제 -->
+    <delete id="deleteByUserIdAndProductId" parameterType="map">
+        DELETE FROM cart
+        WHERE userid = #{userId} AND productid = #{productId};
+    </delete>
+
+    <!-- 사용자의 모든 장바구니 항목 삭제 -->
+    <delete id="deleteAllByUserId" parameterType="long">
+        DELETE FROM cart
+        WHERE userid = #{userId};
+    </delete>
+
+</mapper>
